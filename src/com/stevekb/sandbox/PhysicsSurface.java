@@ -21,11 +21,12 @@ public class PhysicsSurface extends SurfaceView implements
 	private static final float GRAVITY = 10;
 	public float gx, gy;
 	private int maxX, maxY;
-	Context pc;
-
+	Random rand;
+	
 	public PhysicsSurface(Context context, AttributeSet attrs) {
 		super(context, attrs);
 
+		rand = new Random();
 		circles = new ArrayList<Circle>();
 		getHolder().addCallback(this);
 		setFocusable(true);
@@ -76,13 +77,12 @@ public class PhysicsSurface extends SurfaceView implements
 
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
-//		if (event.getAction() == MotionEvent.ACTION_DOWN) {
-//			c.vx = 0;
-//			c.vy = 0;
-//			c.x = event.getX();
-//			c.y = event.getY();
-//			return true;
-//		}
+		if (event.getAction() == MotionEvent.ACTION_DOWN) {
+			
+			circles.add(new Circle(event.getX(), event.getY(), rand.nextInt(50) + 10, rand.nextFloat()/4f + 0.75f ,Color.argb(255, rand.nextInt(256), rand.nextInt(256), rand.nextInt(256))));
+		
+			return true;
+		}
 		return false;
 	}
 
@@ -95,11 +95,6 @@ public class PhysicsSurface extends SurfaceView implements
 	public void surfaceCreated(SurfaceHolder holder) {
 		maxX = getWidth();
 		maxY = getHeight();
-		
-		Random rand = new Random();
-		
-		for (int i = 0; i < 50; i++)
-			circles.add(new Circle(rand.nextInt(maxX), rand.nextInt(maxY), rand.nextInt(50) + 10, rand.nextFloat()/4f + 0.75f ,Color.argb(255, rand.nextInt(256), rand.nextInt(256), rand.nextInt(256))));
 
 		thread.setRunning(true);
 		thread.start();

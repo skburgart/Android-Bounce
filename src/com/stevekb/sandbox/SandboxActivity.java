@@ -11,15 +11,14 @@ public class SandboxActivity extends Activity implements SensorEventListener{
 	
 	private SensorManager mSensorManager;
     private Sensor mAccelerometer;
-	CustomSurface mySurface;
+    PhysicsSurface mySurface;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 
-		mySurface = (CustomSurface) findViewById(R.id.mySurface);
-		mySurface.startMyLogicThread();
+		mySurface = (PhysicsSurface) findViewById(R.id.mySurface);
 		
 		mSensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
         mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
@@ -27,13 +26,12 @@ public class SandboxActivity extends Activity implements SensorEventListener{
 	
 	protected void onResume() {
         super.onResume();
-        mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
+        mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_GAME);
     }
 	
 	public void onPause() {
         super.onPause();
         mSensorManager.unregisterListener(this);
-        mySurface.setActive(false);
     }
 
 	public void onAccuracyChanged(Sensor sensor, int accuracy) {

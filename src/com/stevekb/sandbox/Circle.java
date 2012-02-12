@@ -3,16 +3,16 @@ package com.stevekb.sandbox;
 public class Circle {
 
 	public float x, y, vx, vy;
+	public float elasticity;
 	public int radius;
 	public int color;
 
-	public Circle(float x, float y, float vx, float vy, int radius, int color) {
+	public Circle(float x, float y, int radius, float elasticity, int color) {
 
 		this.x = x;
 		this.y = y;
-		this.vx = vx;
-		this.vy = vy;
 		this.radius = radius;
+		this.elasticity = elasticity;
 		this.color = color;
 	}
 }

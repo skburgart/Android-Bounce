@@ -23,7 +23,7 @@ public class PhysicsSurface extends SurfaceView implements
 	public float gx, gy;
 	private int maxX, maxY;
 	Random rand;
-	
+
 	public PhysicsSurface(Context context, AttributeSet attrs) {
 		super(context, attrs);
 
@@ -46,12 +46,21 @@ public class PhysicsSurface extends SurfaceView implements
 			cp.setColor(c.color);
 			canvas.drawCircle(c.x, c.y, c.radius - 5, cp);
 		}
-		
+
+		// Preview Circle
+		if (makingCircle) {
+			cp.setColor(Color.BLACK);
+			canvas.drawCircle(newX, newY, newRadius, cp);
+			cp.setColor(newColor);
+			canvas.drawCircle(newX, newY, newRadius - 5, cp);
+		}
+
+		// Circle Count
 		Paint tp = new Paint(Paint.ANTI_ALIAS_FLAG);
 		tp.setColor(Color.WHITE);
 		tp.setTextAlign(Align.CENTER);
 		tp.setTextSize(42);
-		canvas.drawText(circles.size() + " circles", maxX/2, 42, tp);
+		canvas.drawText(circles.size() + " circles", maxX / 2, 42, tp);
 	}
 
 	public void update(int delta) {
@@ -82,14 +91,20 @@ public class PhysicsSurface extends SurfaceView implements
 		postInvalidate();
 	}
 
+	private int newColor, newRadius;
+	private float newX, newY, endX, endY;
+	private boolean makingCircle = false;
+
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
+		float touchX;
+		float touchY;
+
 		if (event.getAction() == MotionEvent.ACTION_DOWN) {
-			float touchX = event.getX();
-			float touchY = event.getY();
-			
+			touchX = event.getX();
+			touchY = event.getY();
 			boolean removed = false;
-			
+
 			for (Circle c : circles) {
 				if (touchingCircle(touchX, touchY, c)) {
 					removed = true;
@@ -97,23 +112,50 @@ public class PhysicsSurface extends SurfaceView implements
 					break;
 				}
 			}
-			
-			if (!removed) 
-				circles.add(new Circle(touchX, touchY, rand.nextInt(50) + 10, rand.nextFloat()/4f + 0.75f ,Color.argb(255, rand.nextInt(256), rand.nextInt(256), rand.nextInt(256))));
-		
+
+			if (!removed) {
+				newX = touchX;
+				newY = touchY;
+				newColor = Color.argb(255,
+						rand.nextInt(256), rand.nextInt(256), rand.nextInt(256));
+				makingCircle = true;
+			}
+
 			return true;
 		}
+		if (event.getAction() == MotionEvent.ACTION_MOVE) {
+			endX = event.getX();
+			endY = event.getY();
+			newRadius = distance(newX, newY, endX, endY);
+
+			return true;
+		}
+
+		if (event.getAction() == MotionEvent.ACTION_UP) {
+			if (makingCircle) {
+			
+			int radius = Math.min(Math.max(newRadius, 20), maxX/2 -5);
+				
+			circles.add(new Circle(newX, newY, radius, rand
+					.nextFloat() / 4f + 0.75f, newColor));
+			
+			makingCircle = false;
+			}
+			
+			return true;
+		}
+		
 		return false;
 	}
-	
+
 	private boolean touchingCircle(float x, float y, Circle c) {
 		if (distance(x, y, c.x, c.y) <= c.radius)
 			return true;
 		return false;
 	}
-	
-	private float distance(float x1, float y1, float x2, float y2) {
-		return (float) Math.sqrt((x2-x1)*(x2-x1) + (y2-y1)*(y2-y1));
+
+	private int distance(float x1, float y1, float x2, float y2) {
+		return (int) Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
 	}
 
 	public void surfaceChanged(SurfaceHolder holder, int format, int width,

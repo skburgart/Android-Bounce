@@ -26,11 +26,13 @@ public class SandboxActivity extends Activity implements SensorEventListener{
 	
 	protected void onResume() {
         super.onResume();
+        mySurface.thread.setRunning(true);
         mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_GAME);
     }
 	
 	public void onPause() {
         super.onPause();
+        mySurface.thread.setRunning(false);
         mSensorManager.unregisterListener(this);
     }
 

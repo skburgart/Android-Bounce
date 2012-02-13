@@ -16,13 +16,12 @@ import android.view.SurfaceView;
 public class PhysicsSurface extends SurfaceView implements
 		SurfaceHolder.Callback {
 
-	public GameThread thread;
-
+	private GameThread thread;
 	private ArrayList<Circle> circles;
 	private static final float GRAVITY = 10;
-	public float gx, gy;
+	private float gx, gy;
 	private int maxX, maxY;
-	Random rand;
+	private Random rand;
 
 	public PhysicsSurface(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -116,8 +115,8 @@ public class PhysicsSurface extends SurfaceView implements
 			if (!removed) {
 				newX = touchX;
 				newY = touchY;
-				newColor = Color.argb(255,
-						rand.nextInt(256), rand.nextInt(256), rand.nextInt(256));
+				newColor = Color.argb(255, rand.nextInt(256),
+						rand.nextInt(256), rand.nextInt(256));
 				makingCircle = true;
 			}
 
@@ -126,25 +125,25 @@ public class PhysicsSurface extends SurfaceView implements
 		if (event.getAction() == MotionEvent.ACTION_MOVE) {
 			endX = event.getX();
 			endY = event.getY();
-			newRadius = distance(newX, newY, endX, endY);
+			newRadius = Math.min(Math.max(distance(newX, newY, endX, endY), 20), maxX / 2 - 5);
 
 			return true;
 		}
 
 		if (event.getAction() == MotionEvent.ACTION_UP) {
 			if (makingCircle) {
-			
-			int radius = Math.min(Math.max(newRadius, 20), maxX/2 -5);
-				
-			circles.add(new Circle(newX, newY, radius, rand
-					.nextFloat() / 4f + 0.75f, newColor));
-			
-			makingCircle = false;
+
+				int radius = Math.min(Math.max(newRadius, 20), maxX / 2 - 5);
+
+				circles.add(new Circle(newX, newY, newRadius,
+						rand.nextFloat() / 4f + 0.75f, newColor));
+				newRadius = 20;
+				makingCircle = false;
 			}
-			
+
 			return true;
 		}
-		
+
 		return false;
 	}
 
@@ -156,6 +155,19 @@ public class PhysicsSurface extends SurfaceView implements
 
 	private int distance(float x1, float y1, float x2, float y2) {
 		return (int) Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
+	}
+	
+	public void setGravity(float gx, float gy) {
+		this.gx = gx;
+		this.gy = gy;
+	}
+	
+	public void setThreadRunning(boolean running) {
+		thread.setRunning(running);
+	}
+	
+	public void clearCircles() {
+		circles.clear();
 	}
 
 	public void surfaceChanged(SurfaceHolder holder, int format, int width,

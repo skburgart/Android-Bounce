@@ -2,12 +2,15 @@ package com.stevekb.sandbox;
 
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Align;
+import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -16,12 +19,15 @@ import android.view.SurfaceView;
 public class PhysicsSurface extends SurfaceView implements
 		SurfaceHolder.Callback {
 
+	private static final boolean DEBUG = false;
+
 	private GameThread thread;
 	private ArrayList<Circle> circles;
 	private static final float GRAVITY = 10;
 	private float gx, gy;
 	private int maxX, maxY;
 	private Random rand;
+	private Object circleLock = new Object();
 
 	public PhysicsSurface(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -30,7 +36,6 @@ public class PhysicsSurface extends SurfaceView implements
 		circles = new ArrayList<Circle>();
 		getHolder().addCallback(this);
 		setFocusable(true);
-		thread = new GameThread(this);
 	}
 
 	@Override
@@ -39,11 +44,13 @@ public class PhysicsSurface extends SurfaceView implements
 
 		Paint cp = new Paint(Paint.ANTI_ALIAS_FLAG);
 
-		for (Circle c : circles) {
-			cp.setColor(Color.BLACK);
-			canvas.drawCircle(c.x, c.y, c.radius, cp);
-			cp.setColor(c.color);
-			canvas.drawCircle(c.x, c.y, c.radius - 5, cp);
+		synchronized (circleLock) {
+			for (Circle c : circles) {
+				cp.setColor(Color.BLACK);
+				canvas.drawCircle(c.x, c.y, c.radius, cp);
+				cp.setColor(c.color);
+				canvas.drawCircle(c.x, c.y, c.radius - 5, cp);
+			}
 		}
 
 		// Preview Circle
@@ -60,30 +67,46 @@ public class PhysicsSurface extends SurfaceView implements
 		tp.setTextAlign(Align.CENTER);
 		tp.setTextSize(42);
 		canvas.drawText(circles.size() + " circles", maxX / 2, 42, tp);
+
+		if (DEBUG) {
+			String multiLine = "gx: " + gx + "\ngy: " + gy;
+			tp.setTextAlign(Align.LEFT);
+			tp.setTextSize(30);
+			String lines[] = multiLine.split("\n");
+			int yoff = 30;
+			Rect currentBounds = new Rect();
+			for (int i = 0; i < lines.length; ++i) {
+				canvas.drawText(lines[i], 0, 60 + yoff, tp);
+				tp.getTextBounds(lines[i], 0, lines[i].length(), currentBounds);
+				yoff += currentBounds.height() + 5;
+			}
+		}
 	}
 
 	public void update(int delta) {
 
-		for (Circle c : circles) {
-			c.vx += GRAVITY * gx;
-			c.vy += GRAVITY * gy;
-			c.x += delta / 100f * c.vx;
-			c.y += delta / 100f * c.vy;
+		synchronized (circleLock) {
+			for (Circle c : circles) {
+				c.vx += GRAVITY * gx;
+				c.vy += GRAVITY * gy;
+				c.x += delta / 100f * c.vx;
+				c.y += delta / 100f * c.vy;
 
-			if (c.x < c.radius) {
-				c.vx = -c.vx * c.elasticity;
-				c.x = c.radius;
-			} else if (c.x > maxX - c.radius) {
-				c.vx = -c.vx * c.elasticity;
-				c.x = maxX - c.radius;
-			}
+				if (c.x < c.radius) {
+					c.vx = -c.vx * c.elasticity;
+					c.x = c.radius;
+				} else if (c.x > maxX - c.radius) {
+					c.vx = -c.vx * c.elasticity;
+					c.x = maxX - c.radius;
+				}
 
-			if (c.y < c.radius) {
-				c.vy = -c.vy * c.elasticity;
-				c.y = c.radius;
-			} else if (c.y > maxY - c.radius) {
-				c.vy = -c.vy * c.elasticity;
-				c.y = maxY - c.radius;
+				if (c.y < c.radius) {
+					c.vy = -c.vy * c.elasticity;
+					c.y = c.radius;
+				} else if (c.y > maxY - c.radius) {
+					c.vy = -c.vy * c.elasticity;
+					c.y = maxY - c.radius;
+				}
 			}
 		}
 
@@ -125,7 +148,9 @@ public class PhysicsSurface extends SurfaceView implements
 		if (event.getAction() == MotionEvent.ACTION_MOVE) {
 			endX = event.getX();
 			endY = event.getY();
-			newRadius = Math.min(Math.max(distance(newX, newY, endX, endY), 20), maxX / 2 - 5);
+			newRadius = Math.min(
+					Math.max(distance(newX, newY, endX, endY), 20),
+					maxX / 2 - 5);
 
 			return true;
 		}
@@ -137,8 +162,18 @@ public class PhysicsSurface extends SurfaceView implements
 
 				circles.add(new Circle(newX, newY, newRadius,
 						rand.nextFloat() / 4f + 0.75f, newColor));
-				newRadius = 20;
 				makingCircle = false;
+
+				// Timer timer = new Timer();
+				// timer.scheduleAtFixedRate(new TimerTask() {
+				// @Override
+				// public void run() {
+				// synchronized (circleLock) {
+				// circles.add(new Circle(newX, newY, newRadius, rand
+				// .nextFloat() / 4f + 0.75f, newColor));
+				// }
+				// }
+				// }, 0, 50);
 			}
 
 			return true;
@@ -156,16 +191,16 @@ public class PhysicsSurface extends SurfaceView implements
 	private int distance(float x1, float y1, float x2, float y2) {
 		return (int) Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
 	}
-	
+
 	public void setGravity(float gx, float gy) {
 		this.gx = gx;
 		this.gy = gy;
 	}
-	
+
 	public void setThreadRunning(boolean running) {
 		thread.setRunning(running);
 	}
-	
+
 	public void clearCircles() {
 		circles.clear();
 	}
@@ -180,12 +215,14 @@ public class PhysicsSurface extends SurfaceView implements
 		maxX = getWidth();
 		maxY = getHeight();
 
+		thread = new GameThread(this);
 		thread.setRunning(true);
 		thread.start();
 	}
 
 	public void surfaceDestroyed(SurfaceHolder holder) {
 		boolean retry = true;
+		thread.setRunning(false);
 		while (retry) {
 			try {
 				thread.join();

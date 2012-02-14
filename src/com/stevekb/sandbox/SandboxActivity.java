@@ -6,6 +6,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 public class SandboxActivity extends Activity implements SensorEventListener{
@@ -31,25 +32,26 @@ public class SandboxActivity extends Activity implements SensorEventListener{
 	
 	protected void onResume() {
         super.onResume();
-        mySurface.setThreadRunning(true);
         mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_GAME);
     }
 	
 	public void onPause() {
         super.onPause();
-        mySurface.setThreadRunning(false);
         mSensorManager.unregisterListener(this);
     }
 
 	public void onAccuracyChanged(Sensor sensor, int accuracy) {
 		// TODO Auto-generated method stub
-		
 	}
 
 	public void onSensorChanged(SensorEvent event) {
 		float result[] = event.values;
 		
-		mySurface.setGravity(-(result[0]/10) * Math.abs(result[2])/7, (result[1]/10) * Math.abs(result[2])/7);
-
+		float gDamp = 1 - (Math.abs(result[2])/10);
+		
+		float gx = -(result[0]/10) * gDamp;
+		float gy = (result[1]/10) * gDamp;
+		
+		mySurface.setGravity(gx, gy);
 	}
 }

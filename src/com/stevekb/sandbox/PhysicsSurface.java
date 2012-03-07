@@ -2,8 +2,6 @@ package com.stevekb.sandbox;
 
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -66,7 +64,7 @@ public class PhysicsSurface extends SurfaceView implements
 		tp.setColor(Color.WHITE);
 		tp.setTextAlign(Align.CENTER);
 		tp.setTextSize(42);
-		canvas.drawText(circles.size() + " circles", maxX / 2, 42, tp);
+		canvas.drawText(circles.size() + " balls", maxX / 2, 42, tp);
 
 		if (DEBUG) {
 			String multiLine = "gx: " + gx + "\ngy: " + gy;
@@ -158,10 +156,10 @@ public class PhysicsSurface extends SurfaceView implements
 		if (event.getAction() == MotionEvent.ACTION_UP) {
 			if (makingCircle) {
 
-				int radius = Math.min(Math.max(newRadius, 20), maxX / 2 - 5);
-
-				circles.add(new Circle(newX, newY, newRadius,
-						rand.nextFloat() / 4f + 0.75f, newColor));
+				synchronized (circleLock) {
+					circles.add(new Circle(newX, newY, newRadius, rand
+							.nextFloat() / 4f + 0.75f, newColor));
+				}
 				makingCircle = false;
 
 				// Timer timer = new Timer();

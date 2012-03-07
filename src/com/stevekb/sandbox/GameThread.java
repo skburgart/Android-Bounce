@@ -1,7 +1,5 @@
 package com.stevekb.sandbox;
 
-import android.util.Log;
-
 public class GameThread extends Thread {
 
 	private PhysicsSurface surface;

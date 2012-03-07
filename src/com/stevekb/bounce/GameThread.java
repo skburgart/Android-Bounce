@@ -1,4 +1,4 @@
-package com.stevekb.sandbox;
+package com.stevekb.bounce;
 
 public class GameThread extends Thread {
 

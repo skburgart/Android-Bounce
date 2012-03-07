@@ -1,4 +1,4 @@
-package com.stevekb.sandbox;
+package com.stevekb.bounce;
 
 import android.app.Activity;
 import android.hardware.Sensor;

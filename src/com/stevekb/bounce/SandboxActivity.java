@@ -1,6 +1,9 @@
 package com.stevekb.bounce;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -23,7 +26,29 @@ public class SandboxActivity extends Activity implements SensorEventListener{
 		
 		mSensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
         mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        
+        firstStartMessage();
  	}
+	
+	public void firstStartMessage() {
+		SharedPreferences settings = getSharedPreferences("bounce_first_launch", MODE_PRIVATE);
+		
+		if (settings.getBoolean("firstLaunch", true)) {
+			AlertDialog alert = new AlertDialog.Builder(this).create();
+			alert.setMessage(" - Touch the screen to create a ball\n - Touch a ball to remove it\n - Drag your finger to make big balls\n - Turn your device and watch them bounce!");
+			alert.setTitle("How to Play");
+			alert.setButton("OK", new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int which) {
+					
+				}
+			});
+			alert.show();
+			
+			SharedPreferences.Editor editor = settings.edit();
+			editor.putBoolean("firstLaunch", false);
+			editor.commit();
+		}
+	}
 	
 	public void clearCircles(View v) {
 		mySurface.clearCircles();

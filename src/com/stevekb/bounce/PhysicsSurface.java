@@ -181,9 +181,7 @@ public class PhysicsSurface extends SurfaceView implements
 	}
 
 	private boolean touchingCircle(float x, float y, Circle c) {
-		if (distance(x, y, c.x, c.y) <= c.radius)
-			return true;
-		return false;
+		return distance(x, y, c.x, c.y) <= c.radius;
 	}
 
 	private int distance(float x1, float y1, float x2, float y2) {

@@ -37,7 +37,7 @@ public class MainActivity extends Activity implements SensorEventListener{
 			AlertDialog alert = new AlertDialog.Builder(this).create();
 			alert.setMessage(" - Touch the screen to create a ball\n - Touch a ball to remove it\n - Drag your finger to make big balls\n - Turn your device and watch them bounce!");
 			alert.setTitle("How to Play");
-			alert.setButton("OK", new DialogInterface.OnClickListener() {
+			alert.setButton(DialogInterface.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int which) {
 					
 				}

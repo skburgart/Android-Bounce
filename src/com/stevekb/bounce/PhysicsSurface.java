@@ -21,6 +21,9 @@ public class PhysicsSurface extends SurfaceView implements
 
 	private GameThread thread;
 	private ArrayList<Circle> circles;
+	private Paint cp;
+	private Paint tp;
+	Rect currentBounds;
 	private static final float GRAVITY = 10;
 	private float gx, gy;
 	private int maxX, maxY;
@@ -30,6 +33,9 @@ public class PhysicsSurface extends SurfaceView implements
 	public PhysicsSurface(Context context, AttributeSet attrs) {
 		super(context, attrs);
 
+		cp = new Paint(Paint.ANTI_ALIAS_FLAG);
+		tp = new Paint(Paint.ANTI_ALIAS_FLAG);
+	    currentBounds = new Rect();
 		rand = new Random();
 		circles = new ArrayList<Circle>();
 		getHolder().addCallback(this);
@@ -39,8 +45,6 @@ public class PhysicsSurface extends SurfaceView implements
 	@Override
 	protected void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
-
-		Paint cp = new Paint(Paint.ANTI_ALIAS_FLAG);
 
 		synchronized (circleLock) {
 			for (Circle c : circles) {
@@ -60,7 +64,6 @@ public class PhysicsSurface extends SurfaceView implements
 		}
 
 		// Circle Count
-		Paint tp = new Paint(Paint.ANTI_ALIAS_FLAG);
 		tp.setColor(Color.WHITE);
 		tp.setTextAlign(Align.CENTER);
 		tp.setTextSize(42);
@@ -72,7 +75,6 @@ public class PhysicsSurface extends SurfaceView implements
 			tp.setTextSize(30);
 			String lines[] = multiLine.split("\n");
 			int yoff = 30;
-			Rect currentBounds = new Rect();
 			for (int i = 0; i < lines.length; ++i) {
 				canvas.drawText(lines[i], 0, 60 + yoff, tp);
 				tp.getTextBounds(lines[i], 0, lines[i].length(), currentBounds);

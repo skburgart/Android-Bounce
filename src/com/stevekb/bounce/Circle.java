@@ -16,6 +16,14 @@ public class Circle {
 		this.color = color;
 	}
 
+	public boolean isTouching(float x, float y) {
+		return distance(x, y, this.x, this.y) <= this.radius;
+	}
+
+	public static int distance(float x1, float y1, float x2, float y2) {
+		return (int) Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
+	}
+
 	public float getX() {
 		return x;
 	}

@@ -129,7 +129,7 @@ public class PhysicsSurface extends SurfaceView implements
 			boolean removed = false;
 
 			for (int i = circles.size() - 1; i >= 0; --i) {
-				if (touchingCircle(touchX, touchY, circles.get(i))) {
+				if (circles.get(i).isTouching(touchX, touchY)) {
 					removed = true;
 					circles.remove(circles.get(i));
 					break;
@@ -151,7 +151,7 @@ public class PhysicsSurface extends SurfaceView implements
 			endX = event.getX();
 			endY = event.getY();
 			newRadius = Math
-					.min(Math.max(distance(newX, newY, endX, endY),
+					.min(Math.max(Circle.distance(newX, newY, endX, endY),
 							MIN_BALL_RADIUS), maxX / 2 - 5);
 			return true;
 
@@ -166,14 +166,6 @@ public class PhysicsSurface extends SurfaceView implements
 			return true;
 		}
 		return false;
-	}
-
-	private boolean touchingCircle(float x, float y, Circle c) {
-		return distance(x, y, c.getX(), c.getY()) <= c.getRadius();
-	}
-
-	private int distance(float x1, float y1, float x2, float y2) {
-		return (int) Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
 	}
 
 	public void setGravity(float gx, float gy) {

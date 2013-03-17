@@ -18,13 +18,14 @@ public class PhysicsSurface extends SurfaceView implements
 		SurfaceHolder.Callback {
 
 	private static final boolean DEBUG = false;
+	private static final float GRAVITY = 10;
+	private static final int MIN_BALL_RADIUS = 20;
 
 	private GameThread thread;
 	private ArrayList<Circle> circles;
 	private Paint cp;
 	private Paint tp;
 	Rect currentBounds;
-	private static final float GRAVITY = 10;
 	private float gx, gy;
 	private int maxX, maxY;
 	private Random rand;
@@ -35,7 +36,7 @@ public class PhysicsSurface extends SurfaceView implements
 
 		cp = new Paint(Paint.ANTI_ALIAS_FLAG);
 		tp = new Paint(Paint.ANTI_ALIAS_FLAG);
-	    currentBounds = new Rect();
+		currentBounds = new Rect();
 		rand = new Random();
 		circles = new ArrayList<Circle>();
 		getHolder().addCallback(this);
@@ -122,15 +123,16 @@ public class PhysicsSurface extends SurfaceView implements
 		float touchX;
 		float touchY;
 
-		if (event.getAction() == MotionEvent.ACTION_DOWN) {
+		switch (event.getAction()) {
+		case MotionEvent.ACTION_DOWN:
 			touchX = event.getX();
 			touchY = event.getY();
 			boolean removed = false;
 
-			for (Circle c : circles) {
-				if (touchingCircle(touchX, touchY, c)) {
+			for (int i = circles.size() - 1; i >= 0; --i) {
+				if (touchingCircle(touchX, touchY, circles.get(i))) {
 					removed = true;
-					circles.remove(c);
+					circles.remove(circles.get(i));
 					break;
 				}
 			}
@@ -138,24 +140,23 @@ public class PhysicsSurface extends SurfaceView implements
 			if (!removed) {
 				newX = touchX;
 				newY = touchY;
+				newRadius = MIN_BALL_RADIUS;
 				newColor = Color.argb(255, rand.nextInt(256),
 						rand.nextInt(256), rand.nextInt(256));
 				makingCircle = true;
 			}
 
 			return true;
-		}
-		if (event.getAction() == MotionEvent.ACTION_MOVE) {
+
+		case MotionEvent.ACTION_MOVE:
 			endX = event.getX();
 			endY = event.getY();
-			newRadius = Math.min(
-					Math.max(distance(newX, newY, endX, endY), 20),
-					maxX / 2 - 5);
-
+			newRadius = Math
+					.min(Math.max(distance(newX, newY, endX, endY),
+							MIN_BALL_RADIUS), maxX / 2 - 5);
 			return true;
-		}
 
-		if (event.getAction() == MotionEvent.ACTION_UP) {
+		case MotionEvent.ACTION_UP:
 			if (makingCircle) {
 
 				synchronized (circleLock) {

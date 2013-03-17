@@ -50,9 +50,9 @@ public class PhysicsSurface extends SurfaceView implements
 		synchronized (circleLock) {
 			for (Circle c : circles) {
 				cp.setColor(Color.BLACK);
-				canvas.drawCircle(c.x, c.y, c.radius, cp);
-				cp.setColor(c.color);
-				canvas.drawCircle(c.x, c.y, c.radius - 5, cp);
+				canvas.drawCircle(c.getX(), c.getY(), c.getRadius(), cp);
+				cp.setColor(c.getColor());
+				canvas.drawCircle(c.getX(), c.getY(), c.getRadius() - 5, cp);
 			}
 		}
 
@@ -88,29 +88,28 @@ public class PhysicsSurface extends SurfaceView implements
 
 		synchronized (circleLock) {
 			for (Circle c : circles) {
-				c.vx += GRAVITY * gx;
-				c.vy += GRAVITY * gy;
-				c.x += delta / 100f * c.vx;
-				c.y += delta / 100f * c.vy;
+				c.setVx(c.getVx() + GRAVITY * gx);
+				c.setVy(c.getVy() + GRAVITY * gy);
+				c.setX(c.getX() + delta / 100f * c.getVx());
+				c.setY(c.getY() + delta / 100f * c.getVy());
 
-				if (c.x < c.radius) {
-					c.vx = -c.vx * c.elasticity;
-					c.x = c.radius;
-				} else if (c.x > maxX - c.radius) {
-					c.vx = -c.vx * c.elasticity;
-					c.x = maxX - c.radius;
+				if (c.getX() < c.getRadius()) {
+					c.setVx(-c.getVx() * c.getElasticity());
+					c.setX(c.getRadius());
+				} else if (c.getX() > maxX - c.getRadius()) {
+					c.setVx(-c.getVx() * c.getElasticity());
+					c.setX(maxX - c.getRadius());
 				}
 
-				if (c.y < c.radius) {
-					c.vy = -c.vy * c.elasticity;
-					c.y = c.radius;
-				} else if (c.y > maxY - c.radius) {
-					c.vy = -c.vy * c.elasticity;
-					c.y = maxY - c.radius;
+				if (c.getY() < c.getRadius()) {
+					c.setVy(-c.getVy() * c.getElasticity());
+					c.setY(c.getRadius());
+				} else if (c.getY() > maxY - c.getRadius()) {
+					c.setVy(-c.getVy() * c.getElasticity());
+					c.setY(maxY - c.getRadius());
 				}
 			}
 		}
-
 		postInvalidate();
 	}
 
@@ -158,33 +157,19 @@ public class PhysicsSurface extends SurfaceView implements
 
 		case MotionEvent.ACTION_UP:
 			if (makingCircle) {
-
 				synchronized (circleLock) {
 					circles.add(new Circle(newX, newY, newRadius, rand
 							.nextFloat() / 4f + 0.75f, newColor));
 				}
 				makingCircle = false;
-
-				// Timer timer = new Timer();
-				// timer.scheduleAtFixedRate(new TimerTask() {
-				// @Override
-				// public void run() {
-				// synchronized (circleLock) {
-				// circles.add(new Circle(newX, newY, newRadius, rand
-				// .nextFloat() / 4f + 0.75f, newColor));
-				// }
-				// }
-				// }, 0, 50);
 			}
-
 			return true;
 		}
-
 		return false;
 	}
 
 	private boolean touchingCircle(float x, float y, Circle c) {
-		return distance(x, y, c.x, c.y) <= c.radius;
+		return distance(x, y, c.getX(), c.getY()) <= c.getRadius();
 	}
 
 	private int distance(float x1, float y1, float x2, float y2) {

@@ -34,7 +34,7 @@
         android:layout_gravity="center_horizontal"
         ads:adSize="BANNER"
         ads:adUnitId="a15105f2e00988e"
-        ads:testDevices="2387671384D56263C715B8EBE0E58260"
+	    ads:testDevices="2387671384D56263C715B8EBE0E58260,080DB6284D8A53D1EFB2549EC8ED67B6"
         ads:loadAdOnCreate="true">
     </com.google.ads.AdView>
     

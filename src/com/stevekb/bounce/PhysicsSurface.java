@@ -131,7 +131,9 @@ public class PhysicsSurface extends SurfaceView implements
 			for (int i = circles.size() - 1; i >= 0; --i) {
 				if (circles.get(i).isTouching(touchX, touchY)) {
 					removed = true;
-					circles.remove(circles.get(i));
+					synchronized (circleLock) {
+						circles.remove(circles.get(i));
+					}
 					break;
 				}
 			}
@@ -150,9 +152,9 @@ public class PhysicsSurface extends SurfaceView implements
 		case MotionEvent.ACTION_MOVE:
 			endX = event.getX();
 			endY = event.getY();
-			newRadius = Math
-					.min(Math.max(Circle.distance(newX, newY, endX, endY),
-							MIN_BALL_RADIUS), maxX / 2 - 5);
+			newRadius = Math.min(Math.max(
+					Circle.distance(newX, newY, endX, endY), MIN_BALL_RADIUS),
+					maxX / 2 - 5);
 			return true;
 
 		case MotionEvent.ACTION_UP:

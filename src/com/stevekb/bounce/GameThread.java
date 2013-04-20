@@ -15,8 +15,6 @@ public class GameThread extends Thread {
 
     @Override
     public void run() {
-        super.run();
-
         long time1 = System.currentTimeMillis();
         long time2;
 

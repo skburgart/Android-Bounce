@@ -28,7 +28,7 @@ public class PhysicsSurface extends SurfaceView implements
     private float gx, gy;
     private int maxX, maxY;
     private Random rand;
-    private Object circleLock = new Object();
+    private final Object circleLock = new Object();
 
     public PhysicsSurface(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -67,7 +67,7 @@ public class PhysicsSurface extends SurfaceView implements
         tp.setColor(Color.WHITE);
         tp.setTextAlign(Align.CENTER);
         tp.setTextSize(42);
-        canvas.drawText(circles.size() + " balls", maxX / 2, 42, tp);
+        canvas.drawText(circles.size() + " " + getResources().getString(R.string.count_balls), maxX / 2, 42, tp);
 
         if (DEBUG) {
             String multiLine = "gx: " + gx + "\ngy: " + gy;

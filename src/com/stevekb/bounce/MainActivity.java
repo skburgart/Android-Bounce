@@ -35,9 +35,9 @@ public class MainActivity extends Activity implements SensorEventListener {
 
         if (settings.getBoolean("firstLaunch", true)) {
             AlertDialog alert = new AlertDialog.Builder(this).create();
-            alert.setMessage(" - Touch the screen to create a ball\n - Touch a ball to remove it\n - Drag your finger to make big balls\n - Turn your device and watch them bounce!");
-            alert.setTitle("How to Play");
-            alert.setButton(DialogInterface.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
+            alert.setMessage(getResources().getString(R.string.first_run_text));
+            alert.setTitle(getResources().getString(R.string.first_run_title));
+            alert.setButton(DialogInterface.BUTTON_POSITIVE, getResources().getString(R.string.first_run_confirm), new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                 }
             });
@@ -53,11 +53,13 @@ public class MainActivity extends Activity implements SensorEventListener {
         mySurface.clearCircles();
     }
 
+    @Override
     protected void onResume() {
         super.onResume();
         mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_GAME);
     }
 
+    @Override
     public void onPause() {
         super.onPause();
         mSensorManager.unregisterListener(this);

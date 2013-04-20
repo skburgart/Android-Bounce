@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Bouncing Balls</string>
+    <string name="first_run_text">- Touch the screen to create a ball\n- Touch a ball to remove it\n- Drag your finger to make big balls\n- Turn your device and watch them bounce!</string>
+    <string name="first_run_title">How to Play</string>
+    <string name="first_run_confirm">OK</string>
+    <string name="count_balls">balls</string>
     <string name="clear">clear</string>
 </resources>

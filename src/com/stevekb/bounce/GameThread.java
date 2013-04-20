@@ -1,5 +1,7 @@
 package com.stevekb.bounce;
 
+import android.os.SystemClock;
+
 public class GameThread extends Thread {
 
     private PhysicsSurface surface;
@@ -19,12 +21,7 @@ public class GameThread extends Thread {
         long time2;
 
         while (running) {
-            try {
-                Thread.sleep(34);
-            } catch (InterruptedException e1) {
-                e1.printStackTrace();
-            }
-
+            SystemClock.sleep(34);
             time2 = System.currentTimeMillis();
             int delta = (int) (time2 - time1);
             surface.update(delta);

@@ -65,10 +65,6 @@ public class MainActivity extends Activity implements SensorEventListener {
         mSensorManager.unregisterListener(this);
     }
 
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {
-        // TODO Auto-generated method stub
-    }
-
     public void onSensorChanged(SensorEvent event) {
         float result[] = event.values;
 
@@ -78,5 +74,9 @@ public class MainActivity extends Activity implements SensorEventListener {
         float gy = (result[1] / 10) * gDamp;
 
         mySurface.setGravity(gx, gy);
+    }
+
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+        // Nothing
     }
 }

@@ -24,7 +24,7 @@ public class PhysicsSurface extends SurfaceView implements
     private ArrayList<Circle> circles;
     private Paint cp;
     private Paint tp;
-    Rect currentBounds;
+    private Rect currentBounds = new Rect();
     private float gx, gy;
     private int maxX, maxY;
     private Random rand;
@@ -35,7 +35,6 @@ public class PhysicsSurface extends SurfaceView implements
 
         cp = new Paint(Paint.ANTI_ALIAS_FLAG);
         tp = new Paint(Paint.ANTI_ALIAS_FLAG);
-        currentBounds = new Rect();
         rand = new Random();
         circles = new ArrayList<Circle>();
         getHolder().addCallback(this);

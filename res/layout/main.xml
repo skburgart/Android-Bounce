@@ -7,34 +7,34 @@
     android:layout_height="fill_parent"
     android:orientation="vertical">
     
-	<FrameLayout 
-		android:layout_width="fill_parent"
-	    android:layout_height="0dip"
-	    android:layout_weight="1"
-	    android:orientation="vertical" >
-	
-	    <com.stevekb.bounce.PhysicsSurface
-	    	android:id="@+id/mySurface"
-	        android:layout_width="fill_parent"
-	        android:layout_height="fill_parent"
-	        android:background="#0055EE" />
-	
-	    <Button
-	        android:id="@+id/button1"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:text="@string/clear"
-	        android:onClick="clearCircles"/>
-	</FrameLayout>
-	
-	<com.google.ads.AdView
-    	android:id="@+id/adView"
+    <FrameLayout 
+        android:layout_width="fill_parent"
+        android:layout_height="0dip"
+        android:layout_weight="1"
+        android:orientation="vertical" >
+    
+        <com.stevekb.bounce.PhysicsSurface
+            android:id="@+id/mySurface"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="#0055EE" />
+    
+        <Button
+            android:id="@+id/button1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/clear"
+            android:onClick="clearCircles"/>
+    </FrameLayout>
+    
+    <com.google.ads.AdView
+        android:id="@+id/adView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         ads:adSize="BANNER"
         ads:adUnitId="a15105f2e00988e"
-	    ads:testDevices="2387671384D56263C715B8EBE0E58260,080DB6284D8A53D1EFB2549EC8ED67B6"
+        ads:testDevices="2387671384D56263C715B8EBE0E58260,080DB6284D8A53D1EFB2549EC8ED67B6"
         ads:loadAdOnCreate="true">
     </com.google.ads.AdView>
     

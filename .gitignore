@@ -14,3 +14,9 @@ gen/
 
 # Local configuration file (sdk path, etc)
 local.properties
+/nbandroid/
+default.properties
+proguard-project.txt
+build.properties
+build.xml
+ant.properties

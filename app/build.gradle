@@ -14,7 +14,10 @@ buildscript {
 apply plugin: 'com.github.triplet.play'
 
 play {
-    jsonFile = file(System.getenv("ANDROID_PUBLISH_JSON"))
+    def jsonLocation = System.getenv("ANDROID_PUBLISH_JSON")
+    if (jsonLocation != null) {
+        jsonFile = file(jsonLocation)
+    }
     track = 'production'
 }
 
@@ -32,7 +35,10 @@ android {
 
     signingConfigs {
         releaseSigning {
-            storeFile file(System.getenv("ANDROID_KEYSTORE"))
+            def keystoreLocation = System.getenv("ANDROID_KEYSTORE")
+            if (keystoreLocation != null) {
+                storeFile file(keystoreLocation)
+            }
             storePassword System.getenv("ANDROID_KEYSTORE_PASSWORD")
             keyAlias System.getenv("ANDROID_KEYSTORE_ALIAS")
             keyPassword System.getenv("ANDROID_KEYSTORE_PASSWORD")

@@ -11,9 +11,20 @@ android {
         versionCode 6
         versionName "1.5"
     }
+
+    signingConfigs {
+        releaseSigning {
+            storeFile file(System.getenv("ANDROID_KEYSTORE"))
+            storePassword System.getenv("ANDROID_KEYSTORE_PASSWORD")
+            keyAlias System.getenv("ANDROID_KEYSTORE_ALIAS")
+            keyPassword System.getenv("ANDROID_KEYSTORE_PASSWORD")
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
+            signingConfig signingConfigs.releaseSigning
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }

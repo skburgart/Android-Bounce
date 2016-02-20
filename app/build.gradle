@@ -15,6 +15,7 @@ apply plugin: 'com.github.triplet.play'
 
 play {
     jsonFile = file(System.getenv("ANDROID_PUBLISH_JSON"))
+    track = 'production'
 }
 
 android {

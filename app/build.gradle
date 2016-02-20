@@ -1,5 +1,22 @@
 apply plugin: 'com.android.application'
 
+buildscript {
+
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath 'com.github.triplet.gradle:play-publisher:1.1.4'
+    }
+}
+
+apply plugin: 'com.github.triplet.play'
+
+play {
+    jsonFile = file(System.getenv("ANDROID_PUBLISH_JSON"))
+}
+
 android {
     compileSdkVersion 23
     buildToolsVersion "23.0.2"

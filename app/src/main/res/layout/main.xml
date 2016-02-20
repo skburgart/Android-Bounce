@@ -2,7 +2,7 @@
 
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical">
@@ -27,15 +27,13 @@
             android:onClick="clearCircles"/>
     </FrameLayout>
 
-    <com.google.ads.AdView
+    <com.google.android.gms.ads.AdView
         android:id="@+id/adView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         ads:adSize="SMART_BANNER"
-        ads:adUnitId="a15105f2e00988e"
-        ads:testDevices="2387671384D56263C715B8EBE0E58260,080DB6284D8A53D1EFB2549EC8ED67B6"
-        ads:loadAdOnCreate="true">
-    </com.google.ads.AdView>
+        ads:adUnitId="a15105f2e00988e">
+    </com.google.android.gms.ads.AdView>
 
 </LinearLayout>

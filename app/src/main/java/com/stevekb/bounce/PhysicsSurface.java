@@ -67,7 +67,7 @@ public class PhysicsSurface extends SurfaceView implements
         tp.setColor(Color.WHITE);
         tp.setTextAlign(Align.CENTER);
         int fontSizeDip = 30;
-        int fontSizePixels= (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, fontSizeDip, getResources().getDisplayMetrics());
+        int fontSizePixels = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, fontSizeDip, getResources().getDisplayMetrics());
         tp.setTextSize(fontSizePixels);
 
         canvas.drawText(circles.size() + " " + getResources().getString(R.string.count_balls), maxX / 2, fontSizePixels, tp);
@@ -114,6 +114,7 @@ public class PhysicsSurface extends SurfaceView implements
         }
         postInvalidate();
     }
+
     private int newColor, newRadius;
     private float newX, newY, endX, endY;
     private boolean makingCircle = false;
@@ -127,26 +128,22 @@ public class PhysicsSurface extends SurfaceView implements
             case MotionEvent.ACTION_DOWN:
                 touchX = event.getX();
                 touchY = event.getY();
-                boolean removed = false;
 
                 for (int i = circles.size() - 1; i >= 0; --i) {
                     if (circles.get(i).isTouching(touchX, touchY)) {
-                        removed = true;
                         synchronized (circleLock) {
                             circles.remove(circles.get(i));
                         }
-                        break;
+                        return true;
                     }
                 }
 
-                if (!removed) {
-                    newX = touchX;
-                    newY = touchY;
-                    newRadius = MIN_BALL_RADIUS;
-                    newColor = Color.argb(255, rand.nextInt(256),
-                            rand.nextInt(256), rand.nextInt(256));
-                    makingCircle = true;
-                }
+                newX = touchX;
+                newY = touchY;
+                newRadius = MIN_BALL_RADIUS;
+                newColor = Color.argb(255, rand.nextInt(256),
+                        rand.nextInt(256), rand.nextInt(256));
+                makingCircle = true;
 
                 return true;
 
@@ -154,7 +151,7 @@ public class PhysicsSurface extends SurfaceView implements
                 endX = event.getX();
                 endY = event.getY();
                 newRadius = Math.min(Math.max(
-                        Circle.distance(newX, newY, endX, endY), MIN_BALL_RADIUS),
+                                Circle.distance(newX, newY, endX, endY), MIN_BALL_RADIUS),
                         maxX / 2 - 5);
                 return true;
 
@@ -185,7 +182,7 @@ public class PhysicsSurface extends SurfaceView implements
     }
 
     public void surfaceChanged(SurfaceHolder holder, int format, int width,
-            int height) {
+                               int height) {
         maxX = width;
         maxY = height;
     }

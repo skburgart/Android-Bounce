@@ -29,8 +29,13 @@ android {
         applicationId "com.stevekb.bounce"
         minSdkVersion 15
         targetSdkVersion 23
-        versionCode 7
-        versionName "1.6"
+        def versionCodeString = System.getenv("VERSION_CODE")
+        if (versionCodeString != null) {
+            versionCode versionCodeString.toInteger()
+        } else {
+            versionCode 1
+        }
+        versionName System.getenv("VERSION_NAME")
     }
 
     signingConfigs {

@@ -1,8 +1,5 @@
 package com.stevekb.bounce;
 
-import java.util.ArrayList;
-import java.util.Random;
-
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -15,12 +12,16 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import java.util.ArrayList;
+import java.util.Random;
+
 public class PhysicsSurface extends SurfaceView implements
         SurfaceHolder.Callback {
 
     private static final boolean DEBUG = false;
     private static final float GRAVITY = 10;
     private static final int MIN_BALL_RADIUS = 20;
+    private final Object circleLock = new Object();
     private GameThread thread;
     private ArrayList<Circle> circles;
     private Paint cp;
@@ -29,7 +30,9 @@ public class PhysicsSurface extends SurfaceView implements
     private float gx, gy;
     private int maxX, maxY;
     private Random rand;
-    private final Object circleLock = new Object();
+    private int newColor, newRadius;
+    private float newX, newY, endX, endY;
+    private boolean makingCircle = false;
 
     public PhysicsSurface(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -114,10 +117,6 @@ public class PhysicsSurface extends SurfaceView implements
         }
         postInvalidate();
     }
-
-    private int newColor, newRadius;
-    private float newX, newY, endX, endY;
-    private boolean makingCircle = false;
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {

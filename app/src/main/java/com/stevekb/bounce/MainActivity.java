@@ -16,9 +16,9 @@ import com.google.android.gms.ads.AdView;
 
 public class MainActivity extends Activity implements SensorEventListener {
 
+    PhysicsSurface mySurface;
     private SensorManager mSensorManager;
     private Sensor mAccelerometer;
-    PhysicsSurface mySurface;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

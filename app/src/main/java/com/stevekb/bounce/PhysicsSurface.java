@@ -10,6 +10,7 @@ import android.graphics.Paint;
 import android.graphics.Paint.Align;
 import android.graphics.Rect;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -65,19 +66,22 @@ public class PhysicsSurface extends SurfaceView implements
         // Circle Count
         tp.setColor(Color.WHITE);
         tp.setTextAlign(Align.CENTER);
-        tp.setTextSize(42);
-        canvas.drawText(circles.size() + " " + getResources().getString(R.string.count_balls), maxX / 2, 42, tp);
+        int fontSizeDip = 30;
+        int fontSizePixels= (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, fontSizeDip, getResources().getDisplayMetrics());
+        tp.setTextSize(fontSizePixels);
+
+        canvas.drawText(circles.size() + " " + getResources().getString(R.string.count_balls), maxX / 2, fontSizePixels, tp);
 
         if (DEBUG) {
             String multiLine = "gx: " + gx + "\ngy: " + gy;
             tp.setTextAlign(Align.LEFT);
             tp.setTextSize(30);
             String lines[] = multiLine.split("\n");
-            int yoff = 30;
+            int yOffset = 30;
             for (int i = 0; i < lines.length; ++i) {
-                canvas.drawText(lines[i], 0, 60 + yoff, tp);
+                canvas.drawText(lines[i], 0, 60 + yOffset, tp);
                 tp.getTextBounds(lines[i], 0, lines[i].length(), currentBounds);
-                yoff += currentBounds.height() + 5;
+                yOffset += currentBounds.height() + 5;
             }
         }
     }

@@ -11,6 +11,7 @@ plugins {
 
 play {
     serviceAccountCredentials = file("service-account.json")
+    track = "production"
 }
 
 /**

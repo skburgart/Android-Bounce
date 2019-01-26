@@ -76,6 +76,14 @@ android {
    * but it includes debugging tools and is signed with the debug key. The release
    * build type applies Proguard settings and is not signed by default.
    */
+  signingConfigs {
+    release {
+      storeFile file('AndroidKeystore')
+      storePassword System.getenv("ANDROID_KEYSTORE_PASSWORD")
+      keyAlias System.getenv("ANDROID_KEYSTORE_ALIAS")
+      keyPassword System.getenv("ANDROID_KEYSTORE_PASSWORD")
+    }
+  }
 
   buildTypes {
 
@@ -86,6 +94,7 @@ android {
 
     release {
         minifyEnabled true // Enables code shrinking for the release build type.
+        signingConfig signingConfigs.release
         proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
     }
   }

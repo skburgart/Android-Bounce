@@ -1,0 +1,6 @@
+---
+
+include:
+- project: 'android/common-build'
+  file: 'gitlab-ci-android.yml'
+

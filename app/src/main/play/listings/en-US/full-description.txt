@@ -1,0 +1,6 @@
+Got some time to kill? Try out my bouncing balls! A casual game where you make and watch bouncy balls bounce around your screen.
+
+Tap the screen to create a ball.
+Tap the ball to remove it.
+Drag your finger to make balls of any size.
+Rotate your device and watch them bounce!

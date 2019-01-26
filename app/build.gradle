@@ -4,7 +4,14 @@
  * Android-specific build options.
  */
 
-apply plugin: 'com.android.application'
+plugins {
+    id 'com.android.application'
+    id 'com.github.triplet.play' version '2.1.0'
+}
+
+play {
+    serviceAccountCredentials = file("service-account.json")
+}
 
 /**
  * The android block is where you configure all your Android-specific
